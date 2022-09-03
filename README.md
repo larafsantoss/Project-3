@@ -1,3 +1,3 @@
 # Project-3
 
-Lara and Julie's project
+Lara and Julie's project ...  
