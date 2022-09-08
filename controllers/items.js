@@ -10,7 +10,7 @@ router.get("/api/items", (req, res) => {
   });
 });
 
-router.post("api/items", (req, res) => {
+router.post("/api/items", (req, res) => {
   const { name, price, img } = req.body
 
   if (name === '' || price === '' || img === '') {
@@ -30,7 +30,7 @@ router.post("api/items", (req, res) => {
 });
 });
 
-router.put("api/items/:id", (req,res) => {
+router.put("/api/items/:id", (req,res) => {
   const id = req.params.id;
   const {name, price, img} = req.body
 
@@ -50,7 +50,7 @@ router.put("api/items/:id", (req,res) => {
 });
 });
 
-router.delete("api/items/:id", (req, res) => {
+router.delete("/api/items/:id", (req, res) => {
   const id = req.params.id;
 
   const query = "SELECT * FROM products WHERE id=$1";

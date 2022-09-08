@@ -3,6 +3,7 @@ const db = require("./database/db");
 const itemsController = require("./controllers/items");
 const storyController = require("./controllers/story");
 
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
 
 app.use("/", itemsController);
 app.use("/", storyController);
+
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`);
