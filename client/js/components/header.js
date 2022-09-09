@@ -17,5 +17,5 @@ export const renderHeader = () => {
   menuLi.addEventListener("click", renderMenuList);
 
   const story = document.getElementById("story");
-  story.addEventListener("click", renderOurStory); 
+  story.addEventListener("click", renderOurStory);
 };
