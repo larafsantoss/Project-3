@@ -1,17 +1,17 @@
 import { renderMenuList } from "./menu.js";
 import { renderOurStory } from "./our-story.js";
-import { renderHome } from "./home.js";
-import { renderContact } from "./contact.js";
+import { renderCartList } from "./cart.js";
 
 export const renderHeader = () => {
   const header = document.querySelector("#header-nav");
   header.innerHTML = `
     <h1>Cake Shop</h1>
     <ul id="navlist">
-      <li id="home">Home</li>
+      <li>Home</li>
       <li id="menu">Menu</li>
       <li id="story">Our Story</li>
       <li id="contact">Contact</li>
+      <li id="cart">Cart</li>
     </ul>
   `;
 
@@ -21,9 +21,6 @@ export const renderHeader = () => {
   const story = document.getElementById("story");
   story.addEventListener("click", renderOurStory);
 
-  const home = document.getElementById("home");
-  home.addEventListener("click", renderHome);
-
-  const contact = document.getElementById("contact");
-  contact.addEventListener("click", renderContact);
+  const cartLi = document.getElementById("cart");
+  cartLi.addEventListener("click", renderCartList);
 };
