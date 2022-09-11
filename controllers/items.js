@@ -4,7 +4,12 @@ const db = require("../database/db");
 const router = express.Router();
 
 router.get("/api/items", (req, res) => {
-  const sql = "SELECT * FROM products order by id";
+  const { ids } = req.query;
+  const sql =
+    ids && ids.length > 0
+      ? `SELECT * FROM products WHERE id IN(${ids.join(",")}) order by id`
+      : "SELECT * FROM products order by id";
+
   db.query(sql).then((dbRes) => {
     res.json(dbRes.rows);
   });

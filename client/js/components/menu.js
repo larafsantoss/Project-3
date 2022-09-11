@@ -1,3 +1,5 @@
+import { renderItemDetail } from "./item-detail.js";
+
 export const renderEditItemForm = (item) => {
   const page = document.querySelector("#page");
   const heading = document.createElement("h1");
@@ -53,6 +55,8 @@ export const renderItem = (item) => {
 
   const name = document.createElement("h3");
   name.textContent = item.name;
+  name.classList.add("product-name");
+  name.addEventListener("click", () => renderItemDetail(item));
 
   const price = document.createElement("p");
   price.textContent = `$${item.price_in_cents / 100}`;
@@ -99,7 +103,7 @@ export const renderMenuList = () => {
   axios
     .get("/api/items")
     .then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       const items = response.data.map((item) => renderItem(item));
       // console.log(items);
 
