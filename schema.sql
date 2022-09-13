@@ -5,7 +5,6 @@ CREATE TABLE products (
   image_url TEXT
 );
 
-
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
   id serial PRIMARY KEY,
@@ -22,3 +21,9 @@ CREATE TABLE order_details (
   quantity integer NOT NULL,
   unit_price_in_cents integer NOT NULL
 );
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email TEXT UNIQUE,
+  password TEXT
+)
