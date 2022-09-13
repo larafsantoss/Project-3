@@ -31,7 +31,7 @@ export const renderSignUp = (user) => {
       axios
         .post("/api/signup", data)
         .then(() => {
-          location = '/login.html';
+            location = '/index.html';
         })
         .catch((err) => {
           if (err.response.status === 500) {
