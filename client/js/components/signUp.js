@@ -7,11 +7,11 @@ export const renderSignUp = (user) => {
     form.innerHTML = `
     <fieldset>
       <label for="">E-mail</label>
-      <input type="text" name="email" value="${user.email}">
+      <input type="text" name="email">
     </fieldset>
     <fieldset>
       <label for="">Password: </label>
-      <input type="password" name="password" value="${user.password}">
+      <input type="password" name="password">
     </fieldset>
 
     <button>Sign Up</button>
