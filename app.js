@@ -1,6 +1,7 @@
 const express = require("express");
 const db = require("./database/db");
 const itemsController = require("./controllers/items");
+const ordersController = require("./controllers/orders");
 const { expressSession, pgSession } = require("./session");
 
 const app = express();
@@ -10,6 +11,7 @@ app.use(express.static("client"));
 app.use(express.json());
 
 app.use("/", itemsController);
+app.use("/", ordersController);
 
 app.use(
   expressSession({

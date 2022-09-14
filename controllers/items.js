@@ -23,6 +23,26 @@ router.get("/api/items/:id", (req, res) => {
   );
 });
 
+router.post("/api/items", (req, res) => {
+  const { name, price_in_cents, image_url } = req.body;
+
+  if (name === "" || price_in_cents === "" || image_url === "") {
+    return res.status(400).json({ message: "Please fill in the entire form." });
+  }
+
+  const sql = `
+  INSERT INTO products(name, price_in_cents, image_url) 
+  VALUES($1, $2, $3)
+`;
+  db.query(sql, [name, price_in_cents, image_url])
+    .then((dbRes) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.status(500).json({});
+    });
+});
+
 router.put("/api/items/:id", (req, res) => {
   const id = req.params.id;
 
