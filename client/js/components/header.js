@@ -1,6 +1,8 @@
 import { renderMenuList } from "./menu.js";
 import { renderOurStory } from "./our-story.js";
 import { renderCartList } from "./cart.js";
+import { renderOrderDetails } from "./order-details.js";
+import { renderAllOrders } from "./orders.js";
 
 export const renderHeader = () => {
   const header = document.querySelector("#header-nav");
@@ -12,6 +14,8 @@ export const renderHeader = () => {
       <li id="story">Our Story</li>
       <li id="contact">Contact</li>
       <li id="cart">Cart</li>
+      <li id="orders">All Orders</li>
+      <li id="order_details">Order details</li>
     </ul>
   `;
 
@@ -23,4 +27,10 @@ export const renderHeader = () => {
 
   const cartLi = document.getElementById("cart");
   cartLi.addEventListener("click", renderCartList);
+
+  const ordersLi = document.getElementById("orders");
+  ordersLi.addEventListener("click", renderAllOrders);
+
+  const orderDetailsLi = document.getElementById("order_details");
+  orderDetailsLi.addEventListener("click", renderOrderDetails);
 };
