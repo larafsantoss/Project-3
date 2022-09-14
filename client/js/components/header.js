@@ -3,6 +3,7 @@ import { renderOurStory } from "./our-story.js";
 import { renderCartList } from "./cart.js";
 import { renderOrderDetails } from "./order-details.js";
 import { renderAllOrders } from "./orders.js";
+import { renderNewItem } from "./new-item.js";
 
 export const renderHeader = () => {
   const header = document.querySelector("#header-nav");
@@ -16,6 +17,7 @@ export const renderHeader = () => {
       <li id="cart">Cart</li>
       <li id="orders">All Orders</li>
       <li id="order_details">Order details</li>
+      <li id="add_new_item">Add Item</li>
     </ul>
   `;
 
@@ -33,4 +35,7 @@ export const renderHeader = () => {
 
   const orderDetailsLi = document.getElementById("order_details");
   orderDetailsLi.addEventListener("click", renderOrderDetails);
+
+  const newItemLi = document.getElementById("add_new_item");
+  newItemLi.addEventListener("click", renderNewItem);
 };
