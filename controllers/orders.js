@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/api/orders", (req, res) => {
   const sql = "SELECT * FROM orders order by id";
   db.query(sql).then((dbRes) => {
+    // console.log(dbRes.rows);
     res.json(dbRes.rows);
   });
 });
