@@ -1,3 +1,5 @@
+import { renderOrderSuccessMessage } from "./messages.js";
+
 export const renderCartItem = (item) => {
   const div = document.createElement("div");
 
@@ -18,20 +20,38 @@ export const renderCartItem = (item) => {
   const img = document.createElement("img");
   img.src = item.image_url;
 
-  div.append(name, price, img, quantity, totalItemAmount);
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "Delete";
+  deleteButton.addEventListener("click", () => {
+    const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    delete cartItems[item.id];
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    // console.log(cartItems);
+    renderCartList();
+  });
+
+  div.append(name, price, img, quantity, totalItemAmount, deleteButton);
 
   return div;
 };
 
 export const renderCartList = () => {
-  const cartItems = JSON.parse(localStorage.getItem("cartItems"));
-  const ids = Object.keys(cartItems);
   const page = document.querySelector("#page");
-  const paragraph = document.createElement("p");
+  const paragraph = document.createElement("h3");
   paragraph.classList.add("loading");
-
   paragraph.textContent = "Loading...";
   page.replaceChildren(paragraph);
+
+  const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+
+  if (Object.keys(cartItems).length === 0) {
+    paragraph.textContent = "Your cart is empty";
+    page.replaceChildren(paragraph);
+    return;
+  }
+
+  const ids = Object.keys(cartItems);
+  // console.log(ids);
 
   axios.get("/api/items", { params: { ids } }).then((response) => {
     const items = response.data.map((item) => ({
@@ -39,8 +59,48 @@ export const renderCartList = () => {
       quantity: cartItems[item.id],
       total: (cartItems[item.id] * item.price_in_cents) / 100,
     }));
-    // console.log(items);
+
     const itemEles = items.map((item) => renderCartItem(item));
-    page.replaceChildren(...itemEles);
+
+    const form = document.createElement("form");
+    form.innerHTML = `
+      <h4>Shipping Address</h4>
+      <fieldset>
+        <lable>Customer Name</label>
+        <input name="customer_name" type="text"/>
+      </fieldset>
+
+      <fieldset>
+        <lable>Customer Address</label>
+        <input name="customer_address" type="text"/>
+      </fieldset>
+      
+      <button id="confirm_button">Confirm Order as Guest</button>
+    `;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const data = {
+        customerName: formData.get("customer_name"),
+        customerAddress: formData.get("customer_address"),
+        totalAmount: items[0].total,
+      };
+
+      axios
+        .post("/api/orders", data)
+        .then((response) => {
+          renderOrderSuccessMessage(response.data.orderId);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            alert("Unknown error");
+          } else {
+            alert(err.response.data.message);
+          }
+        });
+    });
+
+    page.replaceChildren(...itemEles, form);
   });
 };

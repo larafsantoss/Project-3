@@ -45,7 +45,7 @@ export const renderItemDetail = (item) => {
     } else {
       cartItems[item.id] = Number(quantityEle.value);
     }
-
+    alert("Item added to cart");
     // console.log(cartItems);
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   });

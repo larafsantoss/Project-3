@@ -6,6 +6,11 @@ import { renderContact } from "./contact.js";
 import { renderLogin } from "./login.js";
 import { logoutAction } from "./logout.js";
 
+import { renderOrderDetails } from "./order-details.js";
+import { renderAllOrders } from "./orders.js";
+import { renderNewItem } from "./new-item.js";
+
+
 export const renderHeader = () => {
   const header = document.querySelector("#header-nav");
   header.innerHTML = `
@@ -19,6 +24,9 @@ export const renderHeader = () => {
       <li id="story">Our Story</li>
       <li id="contact">Contact</li>
       <li id="cart">Cart</li>
+      <li id="orders">All Orders</li>
+      <li id="order_details">Order details</li>
+      <li id="add_new_item">Add Item</li>
     </ul>
   `;
 
@@ -31,6 +39,7 @@ export const renderHeader = () => {
   const cartLi = document.getElementById("cart");
   cartLi.addEventListener("click", renderCartList);
 
+
   const signUp = document.getElementById("sign-up");
   signUp.addEventListener("click", renderSignUp);
 
@@ -42,4 +51,14 @@ export const renderHeader = () => {
 
   const logout = document.getElementById("logout");
   logout.addEventListener("click", logoutAction);
+
+  const ordersLi = document.getElementById("orders");
+  ordersLi.addEventListener("click", renderAllOrders);
+
+  const orderDetailsLi = document.getElementById("order_details");
+  orderDetailsLi.addEventListener("click", renderOrderDetails);
+
+  const newItemLi = document.getElementById("add_new_item");
+  newItemLi.addEventListener("click", renderNewItem);
+
 };
