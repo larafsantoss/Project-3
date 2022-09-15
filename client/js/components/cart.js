@@ -82,9 +82,9 @@ export const renderCartList = () => {
       event.preventDefault();
       const formData = new FormData(form);
       const orderDetails = Object.keys(cartItems).map((itemId) => ({
-        itemId,
+        itemId: Number(itemId),
         quantity: cartItems[itemId],
-        unitPriceInCents: items.find((item) => item.id === itemId)[
+        unitPriceInCents: items.find((item) => item.id === Number(itemId))[
           "price_in_cents"
         ],
       }));
