@@ -1,4 +1,6 @@
-export const renderLogin = (user) => {
+import { renderHome } from "./home.js";
+
+export const renderLogin = () => {
     const page = document.querySelector("#page");
     const heading = document.createElement("h1");
     heading.textContent = "Log in";
@@ -7,11 +9,11 @@ export const renderLogin = (user) => {
     form.innerHTML = `
     <fieldset>
       <label for="">E-mail</label>
-      <input type="text" name="email" value="${user.email}">
+      <input type="text" name="email">
     </fieldset>
     <fieldset>
       <label for="">Password: </label>
-      <input type="password" name="password" value="${user.password}">
+      <input type="password" name="password">
     </fieldset>
 
     <button>Log In</button>
@@ -31,11 +33,12 @@ export const renderLogin = (user) => {
       axios
         .post("/api/session", data)
         .then(() => {
-          location = '/index.html';
+          alert("You are logged in!")  
+          renderHome()
         })
         .catch((err) => {
           if (err.response.status === 500) {
-            alert("Oops, failed to edit item. Please try again.");
+            alert("Failed to log in. Please try again.");
           } else {
             alert(err.response.data.message);
           }

@@ -48,10 +48,15 @@ router.get("/api/session", (req, res) => {
     const email = req.session.email;
 
     if (!email) {
-        return res.status(401).json({ message: "Not loggin in" });
+        return res.status(401).json({ message: "Not logged in" });
     } else {
         return res.json({ email: email });
     }
 });
+
+router.delete("/api/session", (req, res) => {
+    req.session.destroy();
+    return res.json({});
+  });
 
 module.exports = router;  

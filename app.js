@@ -3,7 +3,7 @@ const db = require("./database/db");
 const { expressSession, pgSession } = require("./session");
 
 const itemsController = require("./controllers/items");
-const signupController = require("./controllers/signup");
+const usersController = require("./controllers/users");
 // const expressSession = require("express-session"); // Express library to handle sessions
 // const pg = require("pg");
 
@@ -26,7 +26,7 @@ app.use(
 );
 
 app.use("/", itemsController);
-app.use("/", signupController);
+app.use("/", usersController);
 
 
 

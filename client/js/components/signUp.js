@@ -1,3 +1,5 @@
+import { renderLogin } from "./login.js";
+
 export const renderSignUp = (user) => {
     const page = document.querySelector("#page");
     const heading = document.createElement("h1");
@@ -31,11 +33,12 @@ export const renderSignUp = (user) => {
       axios
         .post("/api/signup", data)
         .then(() => {
-            location = '/index.html';
+            alert("Welcome to Jula's bakery!")
+            renderLogin()
         })
         .catch((err) => {
           if (err.response.status === 500) {
-            alert("Oops, failed to edit item. Please try again.");
+            alert("Oops, failed to Sign Up. Please try again.");
           } else {
             alert(err.response.data.message);
           }
