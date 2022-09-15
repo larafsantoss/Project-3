@@ -81,12 +81,19 @@ export const renderCartList = () => {
     form.addEventListener("submit", (event) => {
       event.preventDefault();
       const formData = new FormData(form);
+      const orderDetails = Object.keys(cartItems).map((itemId) => ({
+        itemId: Number(itemId),
+        quantity: cartItems[itemId],
+        unitPriceInCents: items.find((item) => item.id === Number(itemId))[
+          "price_in_cents"
+        ],
+      }));
       const data = {
         customerName: formData.get("customer_name"),
         customerAddress: formData.get("customer_address"),
         totalAmount: items[0].total,
+        orderDetails,
       };
-
       axios
         .post("/api/orders", data)
         .then((response) => {

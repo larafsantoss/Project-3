@@ -1,3 +1,5 @@
+import { renderOrderDetails } from "./order-details.js";
+
 export const renderAllOrders = () => {
   const page = document.querySelector("#page");
   const paragraph = document.createElement("p");
@@ -25,9 +27,13 @@ export const renderAllOrders = () => {
       <td>${ordersData[i].customer_name}</td>
       <td>${ordersData[i].customer_address}</td>
       <td>${ordersData[i].total_amount}</td>
+      <button id="view">View</button>
     </tr>`;
       ordersDiv.appendChild(orderEles);
     }
     page.replaceChildren(ordersDiv);
+
+    const viewButton = document.getElementById("view");
+    viewButton.addEventListener("click", renderOrderDetails);
   });
 };
