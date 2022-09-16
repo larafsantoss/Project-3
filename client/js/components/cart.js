@@ -1,85 +1,90 @@
-import { renderOrderSuccessMessage } from "./messages.js";
-
 export const renderCartItem = (item) => {
   const div = document.createElement("div");
+  div.classList.add(
+    "row",
+    "g-0",
+    "border",
+    "rounded",
+    "overflow-hidden",
+    "flex-md-row",
+    "mb-4",
+    "shadow-sm",
+    "h-md-250",
+    "position-relative"
+  );
+  div.innerHTML = `
+    <div class="col-auto d-none d-lg-block">
+      <div class="py-4">
+        <img width="150" height="100" src="${item.image_url}" alt="${
+    item.name
+  }">
+      </div>
+    </div>
+    <div class="col p-4 d-flex flex-column position-static">
+      <strong class="d-inline-block mb-2" style="color: #0c0c0c">${
+        item.name
+      }</strong>
+      <div class="mb-1 text-muted">$${item.price_in_cents / 100}</div>
+      <p class="card-text mb-auto">Quantity: ${item.quantity}</p>
+      <button style="width: 70px;" class="btn btn-danger btn-sm my-2 delete-btn">Delete</button>
 
-  const name = document.createElement("h3");
-  name.textContent = item.name;
-  name.classList.add("product-name");
-  name.addEventListener("click", () => renderItemDetail(item));
+    </div>
+    <div class="col col-auto d-flex flex-column justify-content-center px-5">
+      <h4 class="mb-0">$${item.total}</h4>
+    </div>
+  `;
 
-  const price = document.createElement("h5");
-  price.textContent = `Item price: $${item.price_in_cents / 100}`;
-
-  const quantity = document.createElement("h5");
-  quantity.textContent = `Quantity: ${item.quantity}`;
-
-  const totalItemAmount = document.createElement("h5");
-  totalItemAmount.textContent = `Total: ${item.total}`;
-
-  const img = document.createElement("img");
-  img.src = item.image_url;
-
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.addEventListener("click", () => {
+  div.getElementsByClassName("delete-btn")[0].addEventListener("click", () => {
     const cartItems = JSON.parse(localStorage.getItem("cartItems"));
     delete cartItems[item.id];
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    // console.log(cartItems);
     renderCartList();
   });
-
-  div.append(name, price, img, quantity, totalItemAmount, deleteButton);
 
   return div;
 };
 
-export const renderCartList = () => {
-  const page = document.querySelector("#page");
-  const paragraph = document.createElement("h3");
-  paragraph.classList.add("loading");
-  paragraph.textContent = "Loading...";
-  page.replaceChildren(paragraph);
+export const renderOrderForm = (items) => {
+  const section = document.createElement("section");
+  section.classList.add("contact_section", "layout_padding-bottom");
+  section.innerHTML = `
+    <div class="container">
+      <div class="heading_container heading_center" style="margin-top: 20px">
+        <h3>
+          Shipping Information
+        </h3>
+      </div>
+      <div class="row">
+        <div class="col-md-9 mx-auto">
+          <div class="form_container">
+            <form class="order_form">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input name="customer_name" type="text" class="form-control" placeholder="Your Name" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input name="customer_address" type="text" class="form-control" placeholder="Address" />
+                </div>
+              </div>
+              <div class="btn-box">
+                <button class="confirm_button">Confirm Order as Guest</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
-  const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+  const form = section.getElementsByClassName("order_form")[0];
 
-  if (Object.keys(cartItems).length === 0) {
-    paragraph.textContent = "Your cart is empty";
-    page.replaceChildren(paragraph);
-    return;
-  }
-
-  const ids = Object.keys(cartItems);
-  // console.log(ids);
-
-  axios.get("/api/items", { params: { ids } }).then((response) => {
-    const items = response.data.map((item) => ({
-      ...item,
-      quantity: cartItems[item.id],
-      total: (cartItems[item.id] * item.price_in_cents) / 100,
-    }));
-
-    const itemEles = items.map((item) => renderCartItem(item));
-
-    const form = document.createElement("form");
-    form.innerHTML = `
-      <h4>Shipping Address</h4>
-      <fieldset>
-        <lable>Customer Name</label>
-        <input name="customer_name" type="text"/>
-      </fieldset>
-
-      <fieldset>
-        <lable>Customer Address</label>
-        <input name="customer_address" type="text"/>
-      </fieldset>
-      
-      <button id="confirm_button">Confirm Order as Guest</button>
-    `;
-
-    form.addEventListener("submit", (event) => {
+  section
+    .getElementsByClassName("confirm_button")[0]
+    .addEventListener("click", (event) => {
       event.preventDefault();
+      const cartItems = JSON.parse(localStorage.getItem("cartItems"));
       const formData = new FormData(form);
       const orderDetails = Object.keys(cartItems).map((itemId) => ({
         itemId: Number(itemId),
@@ -94,10 +99,26 @@ export const renderCartList = () => {
         totalAmount: items[0].total,
         orderDetails,
       };
+
+      const previewSection = document.getElementById("cart_section_preview");
+
+      previewSection.innerHTML = `
+        <div id="cart_section_data" class="row" style="justify-content: center;">
+          <img src="images/loading.gif" />
+        </div>
+      `;
+
       axios
         .post("/api/orders", data)
         .then((response) => {
-          renderOrderSuccessMessage(response.data.orderId);
+          // Render order success
+          event.preventDefault();
+          previewSection.innerHTML = `
+          <div id="cart_section_data" class="row" style="justify-content: center;">
+            <h1>Your order #${response.data.orderId} has been placed!</h1>
+           </div>
+          `;
+          localStorage.setItem("cartItems", JSON.stringify({}));
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -108,6 +129,55 @@ export const renderCartList = () => {
         });
     });
 
-    page.replaceChildren(...itemEles, form);
+  return section;
+};
+
+export const renderCartList = () => {
+  const page = document.querySelector("#page");
+  const cartSection = document.createElement("section");
+  cartSection.classList.add("about_section", "layout_padding");
+
+  const cartItems = JSON.parse(localStorage.getItem("cartItems"));
+  const isCartEmpty = Object.keys(cartItems).length === 0;
+
+  cartSection.innerHTML = `
+    <div id="cart_section_preview" class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Your Cart
+        </h2>
+      </div>
+      <div id="cart_section_data" class="row" style="justify-content: center;">
+        ${isCartEmpty ? "Oh, it's empty!" : '<img src="images/loading.gif" />'}
+      </div>
+    </div>
+  `;
+  page.replaceChildren(cartSection);
+
+  if (isCartEmpty) return;
+
+  const ids = Object.keys(cartItems);
+  axios.get("/api/items", { params: { ids } }).then((response) => {
+    const items = response.data.map((item) => ({
+      ...item,
+      quantity: cartItems[item.id],
+      total: (cartItems[item.id] * item.price_in_cents) / 100,
+    }));
+    let totalCartAmount = 0;
+    const itemEles = items.map((item) => {
+      totalCartAmount += item.total;
+      return renderCartItem(item);
+    });
+
+    const dataSection = document.querySelector("#cart_section_data");
+    dataSection.classList.remove("row");
+
+    const totalEle = document.createElement("div");
+    totalEle.classList.add("row", "border-bottom");
+    totalEle.style = "justify-content: flex-end;";
+    totalEle.innerHTML = `<h3>Total: $${totalCartAmount}</h3>`;
+
+    const orderForm = renderOrderForm(items);
+    dataSection.replaceChildren(...itemEles, totalEle, orderForm);
   });
 };
