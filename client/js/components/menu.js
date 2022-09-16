@@ -79,48 +79,6 @@ export const renderItem = (item) => {
   return div;
 };
 
-// export const renderItem = (item) => {
-//   const el = document.createElement("div");
-
-//   const name = document.createElement("h3");
-//   name.textContent = item.name;
-//   name.classList.add("product-name");
-//   name.addEventListener("click", () => renderItemDetail(item));
-
-//   const price = document.createElement("p");
-//   price.textContent = `$${item.price_in_cents / 100}`;
-
-//   const img = document.createElement("img");
-//   img.src = item.image_url;
-
-//   const deleteButton = document.createElement("button");
-//   deleteButton.textContent = "Delete";
-//   deleteButton.addEventListener("click", () => {
-//     axios
-//       .delete(`/api/items/${item.id}`)
-//       .then((response) => {
-//         renderMenuList();
-//       })
-//       .catch((err) => {
-//         if (err.response.status === 500) {
-//           alert("Oops, failed to delete item. Please try again.");
-//         } else {
-//           alert(err.response.data.message);
-//         }
-//       });
-//   });
-
-//   const editButton = document.createElement("button");
-//   editButton.textContent = "Edit";
-//   editButton.addEventListener("click", () => {
-//     renderEditItemForm(item);
-//   });
-
-//   el.append(name, price, img, deleteButton, editButton);
-
-//   return el;
-// };
-
 export const renderMenuList = () => {
   const page = document.querySelector("#page");
   const itemSection = document.createElement("section");
