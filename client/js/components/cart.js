@@ -69,7 +69,7 @@ export const renderOrderForm = (items) => {
                 </div>
               </div>
               <div class="btn-box">
-                <button class="confirm_button">Confirm Order as Guest</button>
+                <button class="confirm_button">Confirm Order as Guest</button> 
               </div>
             </form>
           </div>
@@ -82,11 +82,9 @@ export const renderOrderForm = (items) => {
 
   section
     .getElementsByClassName("confirm_button")[0]
-    .addEventListener("click", (event) => {
-      event.preventDefault();
+    .addEventListener("click", () => {
       const cartItems = JSON.parse(localStorage.getItem("cartItems"));
       const formData = new FormData(form);
-      console.log(cartItems);
       const orderDetails = Object.keys(cartItems).map((itemId) => ({
         itemId: Number(itemId),
         quantity: cartItems[itemId],
@@ -120,7 +118,6 @@ export const renderOrderForm = (items) => {
         .post("/api/orders", data)
         .then((response) => {
           // Render order success
-          event.preventDefault();
           previewSection.innerHTML = `
           <div id="cart_section_data" class="row" style="justify-content: center;">
             <h1>Your order #${response.data.orderId} has been placed!</h1>
