@@ -31,7 +31,6 @@ export const renderEditItemForm = (item) => {
       price_in_cents: formData.get("price_in_cents"),
       image_url: formData.get("image_url"),
     };
-    // console.log(data);
 
     axios
       .put(`/api/items/${item.id}`, data)
@@ -51,63 +50,102 @@ export const renderEditItemForm = (item) => {
 };
 
 export const renderItem = (item) => {
-  const el = document.createElement("div");
+  const div = document.createElement("div");
+  div.classList.add("col-sm-6", "col-md-4", "col-lg-3");
+  div.innerHTML = `
+    <div class="box" style="cursor: pointer;">
+      <div>
+        <div class="img-box">
+          <img src="${item.image_url}" alt="${
+    item.name
+  }" style="border-radius: 20px">
+        </div>
+        <div class="detail-box">
+          <a href="#">
+            ${item.name}
+          </a>
+          <h6>
+            $${item.price_in_cents / 100}
+          </h6>
+        </div>
+      </div>
+    </div>
+  `;
 
-  const name = document.createElement("h3");
-  name.textContent = item.name;
-  name.classList.add("product-name");
-  name.addEventListener("click", () => renderItemDetail(item));
-
-  const price = document.createElement("p");
-  price.textContent = `$${item.price_in_cents / 100}`;
-
-  const img = document.createElement("img");
-  img.src = item.image_url;
-
-  const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
-  deleteButton.addEventListener("click", () => {
-    axios
-      .delete(`/api/items/${item.id}`)
-      .then((response) => {
-        renderMenuList();
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          alert("Oops, failed to delete item. Please try again.");
-        } else {
-          alert(err.response.data.message);
-        }
-      });
+  div.addEventListener("click", () => {
+    renderItemDetail(item);
   });
 
-  const editButton = document.createElement("button");
-  editButton.textContent = "Edit";
-  editButton.addEventListener("click", () => {
-    renderEditItemForm(item);
-  });
-
-  el.append(name, price, img, deleteButton, editButton);
-
-  return el;
+  return div;
 };
+
+// export const renderItem = (item) => {
+//   const el = document.createElement("div");
+
+//   const name = document.createElement("h3");
+//   name.textContent = item.name;
+//   name.classList.add("product-name");
+//   name.addEventListener("click", () => renderItemDetail(item));
+
+//   const price = document.createElement("p");
+//   price.textContent = `$${item.price_in_cents / 100}`;
+
+//   const img = document.createElement("img");
+//   img.src = item.image_url;
+
+//   const deleteButton = document.createElement("button");
+//   deleteButton.textContent = "Delete";
+//   deleteButton.addEventListener("click", () => {
+//     axios
+//       .delete(`/api/items/${item.id}`)
+//       .then((response) => {
+//         renderMenuList();
+//       })
+//       .catch((err) => {
+//         if (err.response.status === 500) {
+//           alert("Oops, failed to delete item. Please try again.");
+//         } else {
+//           alert(err.response.data.message);
+//         }
+//       });
+//   });
+
+//   const editButton = document.createElement("button");
+//   editButton.textContent = "Edit";
+//   editButton.addEventListener("click", () => {
+//     renderEditItemForm(item);
+//   });
+
+//   el.append(name, price, img, deleteButton, editButton);
+
+//   return el;
+// };
 
 export const renderMenuList = () => {
   const page = document.querySelector("#page");
-  const paragraph = document.createElement("p");
-  paragraph.classList.add("loading");
-
-  paragraph.textContent = "Loading...";
-  page.replaceChildren(paragraph);
+  const itemSection = document.createElement("section");
+  itemSection.classList.add("product_section", "layout_padding");
+  itemSection.innerHTML = `
+    <div id="product_section_preview" class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Our Products
+        </h2>
+      </div>
+      <div id="product_section_data" class="row" style="justify-content: center;">
+        <img src="images/loading.gif" />
+      </div>
+    </div>
+  `;
+  page.replaceChildren(itemSection);
 
   axios
     .get("/api/items")
     .then((response) => {
-      // console.log(response.data);
-      const items = response.data.map((item) => renderItem(item));
-      // console.log(items);
+      const itemDivs = response.data.map((item) => renderItem(item));
+      const dataSection = document.querySelector("#product_section_data");
 
-      page.replaceChildren(...items);
+      dataSection.replaceChildren(...itemDivs);
     })
     .catch((err) => {
       console.log(err);

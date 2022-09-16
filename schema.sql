@@ -22,6 +22,7 @@ CREATE TABLE order_details (
   unit_price_in_cents integer NOT NULL
 );
 
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email TEXT UNIQUE,
