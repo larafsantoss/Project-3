@@ -86,6 +86,7 @@ export const renderOrderForm = (items) => {
       event.preventDefault();
       const cartItems = JSON.parse(localStorage.getItem("cartItems"));
       const formData = new FormData(form);
+      console.log(cartItems);
       const orderDetails = Object.keys(cartItems).map((itemId) => ({
         itemId: Number(itemId),
         quantity: cartItems[itemId],
@@ -93,10 +94,17 @@ export const renderOrderForm = (items) => {
           "price_in_cents"
         ],
       }));
+
+      let cartTotalAmount = 0;
+      for (const orderDetail of orderDetails) {
+        cartTotalAmount += orderDetail.unitPriceInCents * orderDetail.quantity;
+      }
+      cartTotalAmount = cartTotalAmount / 100;
+
       const data = {
         customerName: formData.get("customer_name"),
         customerAddress: formData.get("customer_address"),
-        totalAmount: items[0].total,
+        totalAmount: cartTotalAmount,
         orderDetails,
       };
 
@@ -158,6 +166,17 @@ export const renderCartList = () => {
 
   const ids = Object.keys(cartItems);
   axios.get("/api/items", { params: { ids } }).then((response) => {
+    const itemsData = response.data;
+    const existingIds = itemsData.map((data) => data.id);
+
+    if (itemsData.length !== ids.length) {
+      const removedIds = ids.filter((id) => !existingIds.includes(Number(id)));
+      for (const removedId of removedIds) {
+        delete cartItems[removedId];
+      }
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+
     const items = response.data.map((item) => ({
       ...item,
       quantity: cartItems[item.id],
