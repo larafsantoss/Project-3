@@ -13,11 +13,11 @@ export const renderHome = () => {
       <div class="col-md-4">
         <div class="box">
           <div class="img-box">
-            <img src="images/c1.jpg" alt="">
+            <img src="images/cake.png" alt="">
           </div>
           <div class="detail-box">
             <h5>
-              Birthday Cakes
+              Cakes
             </h5>
           </div>
         </div>
@@ -25,11 +25,11 @@ export const renderHome = () => {
       <div class="col-md-4">
         <div class="box">
           <div class="img-box">
-            <img src="images/c2.jpg" alt="">
+            <img src="images/madel.png" alt="">
           </div>
           <div class="detail-box">
             <h5>
-              Wedding Cakes
+              Baked Goods
             </h5>
           </div>
         </div>
@@ -138,18 +138,17 @@ export const renderHome = () => {
           <div class="item">
             <div class="box">
               <div class="img-box">
-                <img src="images/client1.jpg" alt="" class="box-img">
+                <img src="images/ge.png" alt="" class="box-img">
               </div>
               <div class="detail-box">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                  "I could not have been happier with theses cakes! No only the exact vision I had for the look, but they tasted delicious. My guests raved about how unique the Carrot Cake was and they were excited to take an extra slice home as their favour. I will definitely use the bakery for future events and I always recommend to all my friends! Thanks again for contributing to my birthday!"
                 </p>
                 <h6>
-                  Klara Smith
+                  Ge Liu
                 </h6>
                 <p>
-                  magna aliqua
+                  Regular Customer
                 </p>
               </div>
             </div>
@@ -157,18 +156,17 @@ export const renderHome = () => {
           <div class="item">
             <div class="box">
               <div class="img-box">
-                <img src="images/client2.jpg" alt="" class="box-img">
+                <img src="images/ken.png" alt="" class="box-img">
               </div>
               <div class="detail-box">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+                  "Everything is always beautiful and delicious! I got numerous compliments every time I buy and share a cake with my friends.I have already told everyone about Jula Bakery and how it is pleasure buying here. Thanks for the wonderful job that you guys always do."
                 </p>
                 <h6>
-                  Jessica Hawk
+                  Ken Nguyen
                 </h6>
                 <p>
-                  magna aliqua
+                  Regular Customer
                 </p>
               </div>
             </div>
