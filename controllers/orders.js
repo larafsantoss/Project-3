@@ -11,11 +11,26 @@ router.get("/api/orders", (req, res) => {
   });
 });
 
-router.get("/api/items/:id", (req, res) => {
+router.get("/api/orders/:id", (req, res) => {
   const id = req.params.id;
-  const sql = "SELECT * FROM orders WHERE id=$1";
+  const sql = `SELECT
+      products.id AS product_id,
+      products.name AS product_name,
+      order_details.unit_price_in_cents,
+      order_details.quantity,
+      orders.customer_name,
+      orders.customer_address,
+      orders.total_amount
+    FROM
+      products
+    INNER JOIN order_details ON
+      order_details.product_id=products.id
+    INNER JOIN orders ON 
+      order_details.order_id=orders.id
+    WHERE
+    order_details.order_id=$1`;
   db.query(sql, [id]).then((dbRes) => {
-    res.json(dbRes.rows.length === 0 ? {} : dbRes.rows[0]);
+    res.json(dbRes.rows);
   });
 });
 

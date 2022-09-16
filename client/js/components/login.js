@@ -1,49 +1,71 @@
 import { renderHome } from "./home.js";
+import { renderSignUp } from "./signUp.js";
 
 export const renderLogin = () => {
-    const page = document.querySelector("#page");
-    const heading = document.createElement("h1");
-    heading.textContent = "Log in";
-  
-    const form = document.createElement("form");
-    form.innerHTML = `
-    <fieldset>
-      <label for="">E-mail</label>
-      <input type="text" name="email">
-    </fieldset>
-    <fieldset>
-      <label for="">Password: </label>
-      <input type="password" name="password">
-    </fieldset>
+  const page = document.querySelector("#page");
+  const formSection = document.createElement("section");
+  formSection.classList.add("product_section", "layout_padding");
+  formSection.innerHTML = `
+    <div id="product_section_preview" class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Log In
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-9 mx-auto">
+          <div class="form_container">
+            <form class="log_in_form">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input name="email" type="text" class="form-control" placeholder="Email Address" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <input name="password" type="password" class="form-control" placeholder="Password" />
+                </div>
+              </div>
+              <div>Have a seller code? <a href="#" class="render-sign-up">Sign Up!</a></div>
+              <div class="btn-box">
+                <a href="#" class="process-log-in">Log In</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
-    <button>Log In</button>
+  formSection
+    .getElementsByClassName("render-sign-up")[0]
+    .addEventListener("click", renderSignUp);
 
-    `;
-    
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-  
+  const form = formSection.getElementsByClassName("log_in_form")[0];
+
+  formSection
+    .getElementsByClassName("process-log-in")[0]
+    .addEventListener("click", () => {
       const formData = new FormData(form);
       const data = {
         email: formData.get("email"),
-        password: formData.get("password")
+        password: formData.get("password"),
       };
-    //   console.log(data);
-  
+
       axios
         .post("/api/session", data)
         .then(() => {
-          alert("You are logged in!")  
-          renderHome()
+          localStorage.setItem("cartItems", JSON.stringify({}));
+          window.location.href = "";
         })
         .catch((err) => {
           if (err.response.status === 500) {
-            alert("Failed to log in. Please try again.");
+            alert("Oops, failed to Log In. Please try again.");
           } else {
             alert(err.response.data.message);
           }
         });
     });
-  
-    page.replaceChildren(heading, form);
-  };
+
+  page.replaceChildren(formSection);
+};

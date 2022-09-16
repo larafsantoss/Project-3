@@ -69,7 +69,7 @@ export const renderOrderForm = (items) => {
                 </div>
               </div>
               <div class="btn-box">
-                <button class="confirm_button">Confirm Order as Guest</button>
+                <button class="confirm_button">Confirm Order as Guest</button> 
               </div>
             </form>
           </div>
@@ -82,8 +82,7 @@ export const renderOrderForm = (items) => {
 
   section
     .getElementsByClassName("confirm_button")[0]
-    .addEventListener("click", (event) => {
-      event.preventDefault();
+    .addEventListener("click", () => {
       const cartItems = JSON.parse(localStorage.getItem("cartItems"));
       const formData = new FormData(form);
       const orderDetails = Object.keys(cartItems).map((itemId) => ({
@@ -93,10 +92,17 @@ export const renderOrderForm = (items) => {
           "price_in_cents"
         ],
       }));
+
+      let cartTotalAmount = 0;
+      for (const orderDetail of orderDetails) {
+        cartTotalAmount += orderDetail.unitPriceInCents * orderDetail.quantity;
+      }
+      cartTotalAmount = cartTotalAmount / 100;
+
       const data = {
         customerName: formData.get("customer_name"),
         customerAddress: formData.get("customer_address"),
-        totalAmount: items[0].total,
+        totalAmount: cartTotalAmount,
         orderDetails,
       };
 
@@ -112,7 +118,6 @@ export const renderOrderForm = (items) => {
         .post("/api/orders", data)
         .then((response) => {
           // Render order success
-          event.preventDefault();
           previewSection.innerHTML = `
           <div id="cart_section_data" class="row" style="justify-content: center;">
             <h1>Your order #${response.data.orderId} has been placed!</h1>
@@ -158,6 +163,17 @@ export const renderCartList = () => {
 
   const ids = Object.keys(cartItems);
   axios.get("/api/items", { params: { ids } }).then((response) => {
+    const itemsData = response.data;
+    const existingIds = itemsData.map((data) => data.id);
+
+    if (itemsData.length !== ids.length) {
+      const removedIds = ids.filter((id) => !existingIds.includes(Number(id)));
+      for (const removedId of removedIds) {
+        delete cartItems[removedId];
+      }
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+
     const items = response.data.map((item) => ({
       ...item,
       quantity: cartItems[item.id],

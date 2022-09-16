@@ -1,11 +1,14 @@
 import { renderItem, renderMenuList } from "./menu.js";
+import { renderOurStory } from "./our-story.js";
 
 export const renderHome = () => {
   const page = document.querySelector("#page");
 
   const introSection = document.createElement("section");
   introSection.classList.add("cat_section");
-  introSection.innerHTML = `<div class="container">
+  introSection.innerHTML = `
+  <section>
+  <div class="container">
     <div class="row">
       <div class="col-md-4">
         <div class="box">
@@ -74,13 +77,14 @@ export const renderHome = () => {
             we live for though. Sometimes we do not even remember that we had to use
             CSS someday! That is the gold.
           </p>
-          <a href="">
+          <a id="read-more-btn" href="#">
             Read More
           </a>
         </div>
       </div>
     </div>
-  </div>`;
+  </div>
+  </section>`;
 
   const itemSection = document.createElement("section");
   itemSection.classList.add("product_section", "layout_padding");
@@ -222,6 +226,9 @@ export const renderHome = () => {
     clientSection,
     contactSection
   );
+
+  const readMoreBtn = document.getElementById("read-more-btn");
+  readMoreBtn.addEventListener("click", renderOurStory);
 
   $(".client_owl-carousel").owlCarousel({
     loop: true,
