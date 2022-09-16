@@ -14,9 +14,7 @@ if (process.env.NODE_ENV === "production") {
   });
 } else {
   db = new pg.Pool({
-    user: "postgres", // TODO: remove this
     database: "cake_shop",
-    password: "3ff746c747d14f4a95548a8107d049a8", // TODO: remove this
   });
 }
 

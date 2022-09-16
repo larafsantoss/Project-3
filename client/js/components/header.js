@@ -27,7 +27,7 @@ const htmlForCustomer = `
           <li id="header-home" class="nav-item">
             <a class="nav-link" href="#">Home</a>
           </li>
-          <li class="nav-item">
+          <li id="header-about" class="nav-item">
             <a class="nav-link" href="#">About</a>
           </li>
           <li id="header-products" class="nav-item">
@@ -110,7 +110,7 @@ const htmlForSeller = `
           <li id="header-home" class="nav-item">
             <a class="nav-link" href="#">Home</a>
           </li>
-          <li class="nav-item">
+          <li id="header-about" class="nav-item">
             <a class="nav-link" href="#">About</a>
           </li>
           <li id="header-products" class="nav-item">
@@ -144,6 +144,9 @@ export const renderHeader = () => {
 
     const productsLi = document.getElementById("header-products");
     productsLi.addEventListener("click", renderMenuList);
+
+    const aboutLi = document.getElementById("header-about");
+    aboutLi.addEventListener("click", renderOurStory);
 
     if (!loggedInEmail) {
       const loginLi = document.getElementById("header-login");
